@@ -9,8 +9,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <main>
-    <h1 class="text-brand">{{ user?.name }}</h1>
-    <Button>aml walaed</Button>
-  </main>
+  <AppLayout>
+    <div class="container"></div>
+  </AppLayout>
 </template>
