@@ -12,7 +12,7 @@ import path from 'node:path'
 import fs from 'node:fs'
 
 function getUIComponentFolders() {
-  const uiDirectory = path.resolve('./src/components/ui') // Change this to your UI components directory path
+  const uiDirectory = path.resolve('./src/components/ui')
   const folders = fs
     .readdirSync(uiDirectory, { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())
@@ -34,11 +34,24 @@ export default defineConfig({
       },
     }),
     AutoImport({
-      imports: ['vue', 'vue-router'],
-      include: [/\.[tj]sx?$/],
-      dirs: ['./src/utils', './src/composables'],
       vueTemplate: true,
       dts: true,
+      imports: [
+        'vue',
+        'vue-router',
+        'vee-validate',
+        {
+          zod: ['z'],
+        },
+        {
+          '@vee-validate/zod': ['toTypedSchema'],
+        },
+        {
+          'class-variance-authority': ['cva'],
+        },
+      ],
+
+      dirs: ['./src/utils/**/*.ts', './src/composables/**/*.ts'],
     }),
     Components({
       dts: './auto-components.d.ts',
@@ -49,6 +62,13 @@ export default defineConfig({
               return {
                 name: componentName,
                 from: 'vue-router',
+              }
+            }
+            if (['FormFieldArray'].includes(componentName)) {
+              return {
+                name: 'FieldArray',
+                as: componentName,
+                from: 'vee-validate',
               }
             }
           },
