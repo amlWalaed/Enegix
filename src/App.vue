@@ -2,9 +2,8 @@
 import { default as layouts } from '@/layouts'
 import { RouterLink, RouterView } from 'vue-router'
 const router = useRouter()
-const currentLayout = ref('div')
+const currentLayout = shallowRef('div')
 router.afterEach((to) => {
-  console.log(layouts['AppLayout'])
   currentLayout.value = layouts[to.meta?.layout] || 'div'
 })
 </script>
