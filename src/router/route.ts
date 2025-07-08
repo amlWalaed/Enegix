@@ -5,6 +5,9 @@ export default [
     path: '/',
     name: 'home',
     component: () => import('@/views/Home.vue'),
+    meta: {
+      layout: 'AppLayout',
+    },
   },
   {
     path: '/login',

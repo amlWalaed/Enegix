@@ -1,6 +1,6 @@
 <script setup lang="ts"></script>
 <template>
-  <nav class="sticky top-0 w-full py-4 shadow-accent shadow-2xl">
+  <nav class="sticky top-0 w-full py-4 shadow-accent shadow-2xl z-50 bg-background">
     <div class="container">
       <AppLogo />
     </div>
