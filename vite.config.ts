@@ -40,6 +40,7 @@ export default defineConfig({
         'vue',
         'vue-router',
         'vee-validate',
+        '@vueuse/core',
         {
           zod: ['z'],
         },
@@ -49,9 +50,30 @@ export default defineConfig({
         {
           'class-variance-authority': ['cva'],
         },
+        {
+          '@tanstack/vue-query': [
+            'useQuery',
+            'useQueryClient',
+            'useMutation',
+            'useInfiniteQuery',
+            'infiniteQueryOptions',
+            'queryOptions',
+          ],
+        },
+        {
+          'reka-ui': ['useForwardPropsEmits', 'useForwardProps', 'useEmitAsProps'],
+        },
+        {
+          '@tanstack/vue-table': ['createColumnHelper'],
+        },
       ],
 
-      dirs: ['./src/utils/**/*.ts', './src/composables/**/*.ts'],
+      dirs: [
+        './src/utils/**/*.ts',
+        './src/composables/**/*.ts',
+        './src/services/**/*.ts',
+        './src/config/**/*.ts',
+      ],
     }),
     Components({
       dts: './auto-components.d.ts',

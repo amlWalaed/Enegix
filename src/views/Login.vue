@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import axios from '@/config/axios'
+const { userId: user } = useAuth()
+const router = useRouter()
 
-const formSchema = toTypedSchema(
-  z.object({
-    username: z.string().min(2).max(50),
-    password: z.string().min(2).max(50),
-  }),
-)
+const formRaw = z.object({
+  username: z.string().min(2).max(50),
+  password: z.string().min(2).max(50),
+})
+const formSchema = toTypedSchema(formRaw)
+type TForm = z.infer<typeof formRaw>
 
-const { isFieldDirty, handleSubmit, errors } = useForm({
+const { isFieldDirty, handleSubmit } = useForm({
   validationSchema: formSchema,
 })
+const { mutate, isPending } = useMutation<User, TForm, TForm>({
+  mutationFn: (variables) => axios.post('login', variables).then((res) => res.data),
+  onSuccess(data) {
+    SessionStore.saveSession(data)
+    user.value = data.id
+    router.push({ name: 'home' })
+  },
+})
 const onSubmit = handleSubmit((values) => {
-  axios.post('login', values)
+  mutate(values)
 })
 </script>
 <template>
@@ -31,7 +40,7 @@ const onSubmit = handleSubmit((values) => {
           <FormField name="password" label="password" :validate-on-blur="!isFieldDirty">
             <Input type="password" />
           </FormField>
-          <Button type="submit">Login</Button>
+          <Button type="submit" :loading="isPending">Login</Button>
         </Form>
       </CardContent>
     </Card>
