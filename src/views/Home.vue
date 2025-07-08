@@ -9,8 +9,15 @@ onBeforeMount(async () => {
 
 const { data: users, isPending } = useQuery<User[]>({
   queryKey: ['users'],
-  queryFn: () => axios.get('users').then((res) => res.data),
+  queryFn: async () => {
+    return await axios
+      .get('users')
+      .then((res) => res.data)
+      .then(async (data) => await decodeAllFields(data))
+  },
+  refetchOnReconnect: true,
   refetchInterval: 1000 * 60,
+  throwOnError: true,
 })
 </script>
 
