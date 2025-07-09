@@ -2,12 +2,15 @@
 const { userId: user } = useAuth()
 const router = useRouter()
 
+type TForm = {
+  username?: string
+  password?: string
+}
 const formRaw = z.object({
   username: z.string().min(2).max(50),
   password: z.string().min(2).max(50),
 })
 const formSchema = toTypedSchema(formRaw)
-type TForm = z.infer<typeof formRaw>
 
 const { isFieldDirty, handleSubmit } = useForm({
   validationSchema: formSchema,
