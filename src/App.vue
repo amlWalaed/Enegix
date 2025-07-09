@@ -1,10 +1,25 @@
 <script setup lang="ts">
 import { default as layouts } from '@/layouts'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
+
 const router = useRouter()
+
 const currentLayout = shallowRef('div')
 router.afterEach((to) => {
   currentLayout.value = layouts[to.meta?.layout] || 'div'
+})
+
+const { isOnline, offlineAt } = useNetwork()
+watch(isOnline, (newVal) => {
+  if (newVal) {
+    toast.success("You're Back Online!", {
+      description: 'Connection restored. All features are now available.',
+    })
+  } else {
+    toast.error("You're Currently Offline", {
+      description: 'Some features may be unavailable. Working in limited mode.',
+    })
+  }
 })
 </script>
 
@@ -16,6 +31,8 @@ router.afterEach((to) => {
       </Transition>
     </RouterView>
   </component>
+
+  <Sonner />
 </template>
 
 <style scoped></style>

@@ -66,6 +66,9 @@ export default defineConfig({
         {
           '@tanstack/vue-table': ['createColumnHelper'],
         },
+        {
+          'vue-sonner': ['toast'],
+        },
       ],
 
       dirs: [
@@ -73,6 +76,8 @@ export default defineConfig({
         './src/composables/**/*.ts',
         './src/services/**/*.ts',
         './src/config/**/*.ts',
+        './src/layouts/**/*.ts',
+        './src/components/**/*.ts',
       ],
     }),
     Components({
