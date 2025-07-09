@@ -32,7 +32,9 @@ const props = withDefaults(
 )
 
 const resolvedData = computed<Data>(() => {
-  return props.paginated ? [...(props.data as DataPaginated)?.data] : [...(props.data as Data)]
+  return props.paginated
+    ? [...((props.data as DataPaginated)?.data ?? [])]
+    : [...((props.data as Data) ?? [])]
 })
 const resolvedColumns = computed<ColumnDef<TData, TValue>[] | []>(() => {
   if (props.selection) {
@@ -105,7 +107,7 @@ const defaultAlignedCenterColumns = ['actions', 'is_active', 'status']
 <template>
   <div
     :class="[
-      'gap-sp-lg flex flex-col',
+      'flex flex-col gap-4',
       {
         'border-neutral-alpha-border-100 p-sp-md rounded-lg  border': props.asCard,
         'max-h-svh': props.stickyHeader,
@@ -212,7 +214,12 @@ const defaultAlignedCenterColumns = ['actions', 'is_active', 'status']
         </slot>
       </Table>
     </slot>
-    <Pagination v-if="props.paginated" :meta="(props.data as DataPaginated)?.meta" />
+    <Pagination
+      class="mb-4 ms-auto"
+      v-if="props.paginated && props?.data?.meta"
+      :itemsPerPage="props.data.meta.per_page"
+      :meta="(props.data as DataPaginated)?.meta"
+    />
   </div>
 </template>
 
