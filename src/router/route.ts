@@ -1,4 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
+import AuthMiddleware from './middleware/AuthMiddleware'
+import GuestMiddleware from './middleware/GuestMiddleware'
 
 export default [
   {
@@ -8,10 +10,12 @@ export default [
     meta: {
       layout: 'AppLayout',
     },
+    beforeEnter: [AuthMiddleware],
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('@/views/Login.vue'),
+    beforeEnter: [GuestMiddleware],
   },
 ] satisfies RouteRecordRaw[]

@@ -1,12 +1,12 @@
-import { openDB, type DBSchema, type IDBPDatabase } from 'idb'
+import { openDB, type DBSchema, type IDBPDatabase, deleteDB } from 'idb'
 
-export interface UserSyncDB extends DBSchema {
+export interface DataBaseSchema extends DBSchema {
   users: { key: number; value: User }
   sessions: { key: number; value: User }
 }
 
 export class Database {
-  private static db: IDBPDatabase<UserSyncDB> | null = null
+  private static db: IDBPDatabase<DataBaseSchema> | null = null
   private static dbName = 'UserSyncDB'
   private static dbVersion = 2 // bump version for new store
 
@@ -15,7 +15,7 @@ export class Database {
    */
   static async initialize(): Promise<void> {
     try {
-      Database.db = await openDB<UserSyncDB>(Database.dbName, Database.dbVersion, {
+      Database.db = await openDB<DataBaseSchema>(Database.dbName, Database.dbVersion, {
         upgrade(db) {
           // Create users store
           if (!db.objectStoreNames.contains('users')) {
@@ -36,10 +36,17 @@ export class Database {
   /**
    * Ensure database is initialized
    */
-  static async ensureDB(): Promise<IDBPDatabase<UserSyncDB>> {
+  static async ensureDB(): Promise<IDBPDatabase<DataBaseSchema>> {
     if (!Database.db) {
       await Database.initialize()
     }
     return Database.db!
+  }
+  /**
+   * Remove Database
+   */
+  static async remove() {
+    Database.db?.close()
+    await deleteDB(Database.dbName)
   }
 }

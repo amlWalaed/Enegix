@@ -37,10 +37,20 @@ const onSubmit = handleSubmit((values) => {
       </CardHeader>
       <CardContent>
         <Form @submit="onSubmit">
-          <FormField name="username" label="username" :validate-on-blur="!isFieldDirty">
+          <FormField
+            name="username"
+            label="username"
+            :validate-on-blur="!isFieldDirty"
+            placeholder="clair44"
+          >
             <Input />
           </FormField>
-          <FormField name="password" label="password" :validate-on-blur="!isFieldDirty">
+          <FormField
+            name="password"
+            label="password"
+            :validate-on-blur="!isFieldDirty"
+            placeholder="test@65!"
+          >
             <Input type="password" />
           </FormField>
           <Button type="submit" :loading="isPending">Login</Button>
