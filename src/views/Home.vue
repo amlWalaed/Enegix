@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SessionStore } from '@/services/sessionStore'
+import type { ColumnDef } from '@tanstack/vue-table'
 
 const { userId } = useAuth()
 const user = ref<User>()
@@ -19,12 +20,29 @@ const { data: users, isPending } = useQuery<User[]>({
   refetchInterval: 1000 * 60,
   throwOnError: true,
 })
+const columnHelper = createColumnHelper<User>()
+const columns: ColumnDef<User, any>[] = [
+  columnHelper.accessor('id', {
+    header: 'ID',
+    cell: ({ getValue }) => getValue(),
+  }),
+  columnHelper.accessor('name', {
+    header: 'Name',
+    cell: ({ getValue }) => getValue(),
+  }),
+  columnHelper.accessor('email', {
+    header: 'Email',
+    cell: ({ getValue }) => getValue(),
+  }),
+  columnHelper.accessor('username', {
+    header: 'Username',
+    cell: ({ getValue }) => getValue(),
+  }),
+]
 </script>
 
 <template>
-  <div class="container">
-    <pre>
-      {{ users }}
-    </pre>
+  <div class="container py-4">
+    <DataTable v-if="users?.length" :data="users" :columns="columns" :paginated="false" />
   </div>
 </template>
