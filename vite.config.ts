@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from 'vite'
+import { build, defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
@@ -27,12 +27,30 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     tailwindcss(),
+
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['images/**/*'],
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+              },
+            },
+          },
+        ],
+      },
       devOptions: {
         enabled: true,
       },
     }),
+
     AutoImport({
       vueTemplate: true,
       dts: true,
