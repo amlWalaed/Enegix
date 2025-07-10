@@ -31,3 +31,4 @@ coverage
 auto-imports.d.ts
 auto-components.d.ts
 .env
+dev-dist/*
