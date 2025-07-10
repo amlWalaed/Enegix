@@ -15,14 +15,6 @@ const formRaw = z.object({
 })
 const formSchema = toTypedSchema(formRaw)
 
-const throwValidationError = (errors: AxiosError<unknown, any>['response']) => {
-  return {
-    status: 422,
-    message: 'Validation failed',
-    errors,
-  } as AxiosError & { errors: any }
-}
-
 const { isFieldDirty, handleSubmit } = useForm({
   validationSchema: formSchema,
 })
