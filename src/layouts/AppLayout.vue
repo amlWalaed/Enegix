@@ -25,7 +25,7 @@ const { mutate, isPending } = useMutation({
   <main class="min-h-svh">
     <slot />
   </main>
-  <footer class="container py-4">
-    <AppLogo />
+  <footer class="py-1 bg-primary text-primary-foreground">
+    <p class="container text-center text-sm font-semibold">Created by aml walaed ❤ 2025</p>
   </footer>
 </template>
