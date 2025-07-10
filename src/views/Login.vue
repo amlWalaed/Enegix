@@ -14,7 +14,12 @@ const formRaw = z.object({
   password: z.string().min(2).max(50),
 })
 const formSchema = toTypedSchema(formRaw)
-
+const throwError = (msg: string) => {
+  return Promise.reject({
+    message: msg,
+    success: false,
+  })
+}
 const { isFieldDirty, handleSubmit } = useForm({
   validationSchema: formSchema,
 })
@@ -23,11 +28,11 @@ const { mutate, isPending, error } = useMutation<User, TForm, TForm>({
     if (isOnline.value) return await axios.post('login', variables).then((res) => res.data)
 
     const user = await UserStore.getUserByUsername(variables.username ?? '')
-    if (!user) return Promise.reject('username not correct')
+    if (!user) return throwError('username not correct')
 
     const isCorrect = await checkPassword(variables.password ?? '', user?.password ?? '')
     if (isCorrect) return user
-    else return Promise.reject('password not correct')
+    else return throwError('password not correct')
   },
   onSuccess(data) {
     SessionStore.saveSession(data)
@@ -48,7 +53,7 @@ const onSubmit = handleSubmit(async (values) => {
         <span
           v-if="error"
           class="bg-red-200 text-red-800 p-2 text-sm font-semibold border-red-900 rounded-md shadow"
-          >{{ error }}</span
+          >{{ error.message }}</span
         >
         <CardTitle>Login</CardTitle>
       </CardHeader>
