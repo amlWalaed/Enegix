@@ -42,11 +42,4 @@ export class Database {
     }
     return Database.db!
   }
-  /**
-   * Remove Database
-   */
-  static async remove() {
-    Database.db?.close()
-    await deleteDB(Database.dbName)
-  }
 }

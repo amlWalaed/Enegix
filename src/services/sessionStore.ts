@@ -9,4 +9,8 @@ export class SessionStore {
     const db = await Database.ensureDB()
     return db.get('sessions', id)
   }
+  static async removeSession(id: number): Promise<void> {
+    const db = await Database.ensureDB()
+    return db.delete('sessions', id)
+  }
 }

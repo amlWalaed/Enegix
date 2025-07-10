@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { Database } from '@/services/database'
+import { SessionStore } from '@/services/sessionStore'
 
-const { removeUserId } = useAuth()
+const { userId, removeUserId } = useAuth()
 const router = useRouter()
 
 const { mutate, isPending } = useMutation({
   mutationFn: async () => {
+    await SessionStore.removeSession(Number(userId.value))
     removeUserId()
-    await Database.remove()
     router.replace({
       name: 'login',
     })

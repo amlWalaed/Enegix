@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import bcrypt from 'bcryptjs'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -30,4 +31,7 @@ export const paginate = <T>(data: Array<T>, currentPage: number = 1, pageSize: n
       last_page: totalPages,
     },
   }
+}
+export const checkPassword = async (inputPassword: string, hashedPassword: string) => {
+  return await bcrypt.compare(inputPassword, hashedPassword)
 }

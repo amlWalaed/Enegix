@@ -1,28 +1,41 @@
 <script setup lang="ts">
+import { UserStore } from '@/services/userStore'
 import { keepPreviousData } from '@tanstack/vue-query'
 import type { ColumnDef } from '@tanstack/vue-table'
 
 const { userId } = useAuth()
+const isOnline = useOnline()
+
 const user = ref<User>()
+const initialData = ref<User[]>([])
+const getInitialData = async () => {
+  return await UserStore.getUsers()
+}
 onBeforeMount(async () => {
   user.value = await SessionStore.getSession(Number(userId.value))
+  initialData.value = await getInitialData()
 })
 const router = useRouter()
 const filters = computed(() => ({
   ...router.currentRoute.value.query,
 }))
+
 const { data: users, isPending } = useQuery<PaginatedData<User>>({
   queryKey: ['users'],
   queryFn: async () => {
     const encodedData = await axios.get('users').then((res) => res.data)
     const decodedData = await decodeAllFields(encodedData)
+    UserStore.saveUsers(decodedData)
     return decodedData
   },
-  refetchOnReconnect: true,
   refetchInterval: 1000 * 60,
+  refetchOnReconnect: 'always',
+  enabled: isOnline,
   placeholderData: keepPreviousData,
 })
-const paginatedUsers = computed(() => paginate(users.value ?? [], filters.value.page))
+const paginatedUsers = computed(() =>
+  paginate(users.value ?? initialData.value ?? [], filters.value.page),
+)
 const columnHelper = createColumnHelper<User>()
 const columns: ColumnDef<User, any>[] = [
   columnHelper.accessor('id', {
